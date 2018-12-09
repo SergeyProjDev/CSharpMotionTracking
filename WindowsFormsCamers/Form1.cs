@@ -28,7 +28,13 @@ namespace WindowsFormsCamers
         {
             Bitmap bmp = (Bitmap)eventArgs.Frame.Clone();
             return new Bitmap(bmp, new Size(SystemInformation.VirtualScreen.Width, SystemInformation.VirtualScreen.Height));
+        }
 
+        void MoveMouse(int X, int Y)
+        {
+            this.Cursor = new Cursor(Cursor.Current.Handle);
+            Cursor.Position = new System.Drawing.Point(X, Y);
+            Cursor.Clip = new Rectangle(this.Location, this.Size);
         }
 
         void stream_NewFrame(object sender, NewFrameEventArgs eventArgs)
@@ -59,11 +65,8 @@ namespace WindowsFormsCamers
             Rectangle[] rects = blobCounter.GetObjectsRectangles();
             foreach (Rectangle recs in rects)
             {
-                //TODO координатами и мышью
-                    this.Cursor = new Cursor(Cursor.Current.Handle);
-                    Cursor.Position = new System.Drawing.Point(recs.X, recs.Y);
-                    Cursor.Clip = new Rectangle(this.Location, this.Size);
                 //TODO
+                MoveMouse(recs.X, recs.Y);
 
                 /*
                 if (rects.Length > 0) //обводить в квадарат
@@ -78,7 +81,12 @@ namespace WindowsFormsCamers
                 }
                 */
             }
-            pictureBox1.Image = bmp; //рисовать
+            Application.Exit();
+        }
+
+        private void Form1_Shown(object sender, EventArgs e)
+        {
+            this.Hide();
         }
     }
 }
